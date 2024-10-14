@@ -14,6 +14,14 @@ import {
   signOut,
   User,
 } from "firebase/auth";
+import {
+  Container,
+  Typography,
+  Button,
+  TextField,
+  Paper,
+  Box,
+} from "@mui/material";
 
 interface Note {
   id: string;
@@ -68,34 +76,59 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="app">
-      <h1>My Diary</h1>
+    <Container maxWidth="sm" sx={{ textAlign: "center", py: 4 }}>
+      <Typography variant="h4" gutterBottom>
+        My Diary
+      </Typography>
       {!user ? (
-        <button onClick={handleLogin}>Login with Google</button>
+        <Button
+          variant="contained"
+          onClick={handleLogin}
+          sx={{ mb: 3, backgroundColor: "#a84d97" }}
+        >
+          Login with Google
+        </Button>
       ) : (
         <>
-          <button onClick={handleLogout}>Logout</button>
-          <div className="notes">
+          <Button variant="outlined" onClick={handleLogout} sx={{ mb: 3 }}>
+            Logout
+          </Button>
+          <Box sx={{ mb: 4 }}>
             {notes.map((note) => (
-              <div key={note.id} className="note">
-                <p>
-                  <strong>{note.date}</strong>
-                </p>
-                <p>{note.content}</p>
-              </div>
+              <Paper
+                key={note.id}
+                sx={{ p: 2, mb: 2, backgroundColor: "#f0f0f0" }}
+              >
+                <Typography variant="body2" color="textSecondary">
+                  {note.date}
+                </Typography>
+                <Typography variant="body1">{note.content}</Typography>
+              </Paper>
             ))}
-          </div>
-          <div className="new-note">
-            <textarea
+          </Box>
+          <Box
+            component="form"
+            sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+          >
+            <TextField
+              multiline
+              rows={4}
+              variant="outlined"
               value={newNote}
               onChange={(e) => setNewNote(e.target.value)}
               placeholder="Write a new note..."
             />
-            <button onClick={handleAddNote}>Add Note</button>
-          </div>
+            <Button
+              variant="contained"
+              onClick={handleAddNote}
+              sx={{ backgroundColor: "#a84d97" }}
+            >
+              Add Note
+            </Button>
+          </Box>
         </>
       )}
-    </div>
+    </Container>
   );
 };
 

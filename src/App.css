@@ -8,6 +8,7 @@
 
 .notes {
   margin-bottom: 20px;
+  background-color: #f0f0f0;
 }
 
 .note {
@@ -31,6 +32,7 @@ textarea {
 }
 
 button {
+  background-color: #a84d97;
   padding: 10px;
   border: none;
   background-color: #a84d97;
