@@ -1,0 +1,81 @@
+$light-yellow: #f4d35e;
+$light-brown: #d4a373;
+$dark-brown: #b5835a;
+$light-gray: #f9f9f9;
+$border-color: #ddd;
+$background-color: #ff0d0d;
+
+.app {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  position: relative;
+  height: 100vh;
+
+  .notes-container {
+    margin-bottom: 1200px;
+    background-color: $background-color;
+    overflow-y: auto;
+  }
+
+  .note {
+    background-color: $light-gray;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 15px;
+    border: 1px solid $border-color;
+  }
+
+  .new-note-container {
+    display: flex;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    width: 90%;
+    max-width: 800px;
+    background-color: #fff;
+    border-top: 1px solid $border-color;
+
+    .new-note-input {
+      flex-grow: 1;
+      margin-right: 10px;
+      border-radius: 4px;
+      border: 1px solid $border-color;
+    }
+
+    .send-button {
+      background-color: $light-brown;
+      color: white;
+
+      &:hover {
+        background-color: $dark-brown;
+      }
+    }
+  }
+
+  .login-button {
+    background-color: $light-yellow;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    color: white;
+
+    &:hover {
+      background-color: darken($light-yellow, 10%);
+    }
+  }
+
+  .logout-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: $light-brown;
+
+    &:hover {
+      color: $dark-brown;
+    }
+  }
+}

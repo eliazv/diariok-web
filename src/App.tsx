@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+//import "./App.css";
+import "./styles/App.scss";
+
 import { db, auth } from "./firebase";
 import {
   collection,
@@ -17,11 +20,13 @@ import {
 import {
   Container,
   Typography,
-  Button,
+  IconButton,
   TextField,
   Paper,
   Box,
 } from "@mui/material";
+import SendIcon from "@mui/icons-material/Send";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 interface Note {
   id: string;
@@ -76,29 +81,22 @@ const App: React.FC = () => {
   };
 
   return (
-    <Container maxWidth="sm" sx={{ textAlign: "center", py: 4 }}>
+    <Container maxWidth="sm" className="app">
       <Typography variant="h4" gutterBottom>
         My Diary
       </Typography>
       {!user ? (
-        <Button
-          variant="contained"
-          onClick={handleLogin}
-          sx={{ mb: 3, backgroundColor: "#a84d97" }}
-        >
+        <button onClick={handleLogin} className="login-button">
           Login with Google
-        </Button>
+        </button>
       ) : (
         <>
-          <Button variant="outlined" onClick={handleLogout} sx={{ mb: 3 }}>
-            Logout
-          </Button>
-          <Box sx={{ mb: 4 }}>
+          <IconButton className="logout-button" onClick={handleLogout}>
+            <LogoutIcon />
+          </IconButton>
+          <Box className="notes-container">
             {notes.map((note) => (
-              <Paper
-                key={note.id}
-                sx={{ p: 2, mb: 2, backgroundColor: "#f0f0f0" }}
-              >
+              <Paper key={note.id} className="note">
                 <Typography variant="body2" color="textSecondary">
                   {note.date}
                 </Typography>
@@ -106,25 +104,19 @@ const App: React.FC = () => {
               </Paper>
             ))}
           </Box>
-          <Box
-            component="form"
-            sx={{ display: "flex", flexDirection: "column", gap: 2 }}
-          >
+          <Box className="new-note-container">
             <TextField
               multiline
-              rows={4}
+              rows={2}
               variant="outlined"
               value={newNote}
               onChange={(e) => setNewNote(e.target.value)}
               placeholder="Write a new note..."
+              className="new-note-input"
             />
-            <Button
-              variant="contained"
-              onClick={handleAddNote}
-              sx={{ backgroundColor: "#a84d97" }}
-            >
-              Add Note
-            </Button>
+            <IconButton onClick={handleAddNote} className="send-button">
+              <SendIcon />
+            </IconButton>
           </Box>
         </>
       )}
