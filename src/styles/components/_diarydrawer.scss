@@ -2,13 +2,13 @@
   background-color: $note-color;
   width: 250px;
   margin: 10px;
-  border-radius: 10px;
+  border-radius: $b-radius;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 
   .MuiPaper-root {
     width: 250px;
-    margin: 15px;
-    border-radius: 15px;
+    margin: 25px;
+    border-radius: $b-radius;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     background-color: $note-color;
   }

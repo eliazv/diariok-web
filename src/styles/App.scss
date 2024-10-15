@@ -6,6 +6,7 @@ $background-color: rgb(25, 25, 25);
 $note-color: #25282a;
 $text-white: #f9f9f9;
 $error: #d65858;
+$b-radius: 25px;
 
 @import "components/diarydrawer";
 
@@ -32,7 +33,7 @@ $error: #d65858;
     background-color: $note-color;
     padding: 10px;
     margin-bottom: 10px;
-    border-radius: 15px;
+    border-radius: $b-radius;
     .note-date {
       color: $brown-accent;
     }
@@ -42,20 +43,22 @@ $error: #d65858;
     display: flex;
     align-items: center;
     position: fixed;
-    bottom: 0;
+    bottom: 10px;
     width: 90%;
     max-width: 800px;
     background-color: $note-color;
-    border-radius: 15px;
+    border-radius: $b-radius;
 
     .new-note-input {
       border-radius: 15px !important;
       flex-grow: 1;
       margin-right: 10px;
-      border-radius: 4px;
+      border-radius: $b-radius;
       border: none;
-      color: $text-white !important;
-      //non prende modifiche
+    }
+    .css-xrmkj5-MuiInputBase-root-MuiOutlinedInput-root {
+      border-radius: $b-radius;
+      margin: 5px;
     }
 
     .send-button {
@@ -74,7 +77,7 @@ $error: #d65858;
     background-color: $light-yellow;
     padding: 10px;
     border: none;
-    border-radius: 4px;
+    border-radius: $b-radius;
     cursor: pointer;
     color: white;
 
@@ -87,5 +90,9 @@ $error: #d65858;
     &:hover {
       color: $error;
     }
+  }
+
+  textarea {
+    color: $text-white;
   }
 }
