@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../styles/App.scss";
 
 import { db, auth } from "../firebase";
@@ -28,6 +28,7 @@ import {
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import DiaryDrawer from "../components/DiaryDrawer";
+import ReactMarkdown from "react-markdown";
 
 interface Note {
   id: string;
@@ -40,6 +41,7 @@ const App: React.FC = () => {
   const [notes, setNotes] = useState<Note[]>([]);
   const [newNote, setNewNote] = useState<string>("");
   const [isDrawerOpen, setDrawerOpen] = useState<boolean>(true);
+  const lastNoteRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -53,8 +55,14 @@ const App: React.FC = () => {
             content: doc.data().content as string,
             date: doc.data().date as string,
           }));
+
+          const parseDate = (dateStr: string) => {
+            const [day, month, year] = dateStr.split("/").map(Number);
+            return new Date(year, month - 1, day);
+          };
+
           const sortedNotes = notesData.sort(
-            (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+            (a, b) => parseDate(a.date).getTime() - parseDate(b.date).getTime()
           );
           setNotes(sortedNotes);
         });
@@ -63,6 +71,12 @@ const App: React.FC = () => {
     });
     return unsubscribe;
   }, []);
+
+  useEffect(() => {
+    if (lastNoteRef.current) {
+      lastNoteRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [notes]);
 
   const handleCloseModal = () => {
     setDrawerOpen(false);
@@ -79,7 +93,7 @@ const App: React.FC = () => {
       if (existingNote) {
         const noteDocRef = doc(db, "notes", existingNote.id);
         await updateDoc(noteDocRef, {
-          content: `${existingNote.content}\n${newNote}`,
+          content: `${existingNote.content}\n\n${newNote}`,
         });
       } else {
         await addDoc(collection(db, "notes"), {
@@ -119,10 +133,16 @@ const App: React.FC = () => {
             handleLogout={handleLogout}
           />
           <Box className="notes-container">
-            {notes.map((note) => (
-              <Paper key={note.id} className="note">
+            {notes.map((note, index) => (
+              <Paper
+                key={note.id}
+                className="note"
+                ref={index === notes.length - 1 ? lastNoteRef : null}
+              >
                 <Typography className="note-date">{note.date}</Typography>
-                <Typography className="note-text">{note.content}</Typography>
+                <ReactMarkdown className="note-text">
+                  {note.content}
+                </ReactMarkdown>
               </Paper>
             ))}
           </Box>
