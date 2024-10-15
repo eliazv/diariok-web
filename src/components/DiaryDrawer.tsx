@@ -27,16 +27,7 @@ const DiaryDrawer = ({
   return (
     <div className="diarydrawer">
       {!open && (
-        <IconButton
-          onClick={onOpen}
-          className="open-drawer-icon"
-          // sx={{
-          //   position: "fixed",
-          //   top: "20px",
-          //   left: "20px",
-          //   zIndex: 1300, // Assicurati che sia sopra il contenuto della pagina
-          // }}
-        >
+        <IconButton onClick={onOpen} className="open-drawer-icon">
           <MenuIcon />
         </IconButton>
       )}
@@ -46,7 +37,7 @@ const DiaryDrawer = ({
           <List>
             <ListItem>
               <ListItemText className="title" primary="Diariok" />
-              <IconButton onClick={onClose}>
+              <IconButton className="close-btn" onClick={onClose}>
                 <CloseIcon />
               </IconButton>
             </ListItem>
@@ -60,7 +51,7 @@ const DiaryDrawer = ({
               <ListItemText primary="Impostazioni" />
             </ListItem>
             <ListItem component="button">
-              <ListItemText className="close-btn" primary="Esci" />
+              <ListItemText primary="Esci" />
               <IconButton className="logout-button" onClick={handleLogout}>
                 <LogoutIcon />
               </IconButton>

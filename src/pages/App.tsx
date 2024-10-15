@@ -8,6 +8,8 @@ import {
   where,
   onSnapshot,
   addDoc,
+  doc,
+  updateDoc,
 } from "firebase/firestore";
 import {
   signInWithPopup,
@@ -36,8 +38,8 @@ interface Note {
 const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [notes, setNotes] = useState<Note[]>([]);
-  const [newNote, setNewNote] = useState("");
-  const [isDrawerOpen, setDrawerOpen] = useState(true);
+  const [newNote, setNewNote] = useState<string>("");
+  const [isDrawerOpen, setDrawerOpen] = useState<boolean>(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -51,7 +53,10 @@ const App: React.FC = () => {
             content: doc.data().content as string,
             date: doc.data().date as string,
           }));
-          setNotes(notesData);
+          const sortedNotes = notesData.sort(
+            (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+          );
+          setNotes(sortedNotes);
         });
         return () => unsubscribeSnapshot();
       }
@@ -69,11 +74,20 @@ const App: React.FC = () => {
   const handleAddNote = async () => {
     const today = new Date().toLocaleDateString();
     if (user) {
-      await addDoc(collection(db, "notes"), {
-        content: newNote,
-        date: today,
-        userId: user.uid,
-      });
+      const existingNote = notes.find((note) => note.date === today);
+
+      if (existingNote) {
+        const noteDocRef = doc(db, "notes", existingNote.id);
+        await updateDoc(noteDocRef, {
+          content: `${existingNote.content}\n${newNote}`,
+        });
+      } else {
+        await addDoc(collection(db, "notes"), {
+          content: newNote,
+          date: today,
+          userId: user.uid,
+        });
+      }
       setNewNote("");
     }
   };
@@ -88,7 +102,10 @@ const App: React.FC = () => {
   };
 
   return (
-    <Container maxWidth="sm" className="app">
+    <Container
+      maxWidth="sm"
+      className={`app ${isDrawerOpen ? "drawer-open" : ""}`}
+    >
       {!user ? (
         <button onClick={handleLogin} className="login-button">
           Login with Google
@@ -119,7 +136,11 @@ const App: React.FC = () => {
               placeholder="Write a new note..."
               className="new-note-input"
             />
-            <IconButton onClick={handleAddNote} className="send-button">
+            <IconButton
+              onClick={handleAddNote}
+              className="send-button"
+              disabled={!newNote.trim()}
+            >
               <SendIcon />
             </IconButton>
           </Box>
