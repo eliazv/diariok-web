@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-//import "./App.css";
-import "./styles/App.scss";
+import "../styles/App.scss";
 
-import { db, auth } from "./firebase";
+import { db, auth } from "../firebase";
 import {
   collection,
   query,
@@ -24,9 +23,17 @@ import {
   TextField,
   Paper,
   Box,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon,
+  Button,
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import LogoutIcon from "@mui/icons-material/Logout";
+import CloseIcon from "@mui/icons-material/Close";
+import DiaryDrawer from "../components/DiaryDrawer";
 
 interface Note {
   id: string;
@@ -38,6 +45,7 @@ const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [notes, setNotes] = useState<Note[]>([]);
   const [newNote, setNewNote] = useState("");
+  const [isDrawerOpen, setDrawerOpen] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -58,6 +66,10 @@ const App: React.FC = () => {
     });
     return unsubscribe;
   }, []);
+
+  const handleCloseModal = () => {
+    setDrawerOpen(false);
+  };
 
   const handleAddNote = async () => {
     const today = new Date().toLocaleDateString();
@@ -83,7 +95,7 @@ const App: React.FC = () => {
   return (
     <Container maxWidth="sm" className="app">
       <Typography variant="h4" gutterBottom>
-        My Diary
+        Diariok
       </Typography>
       {!user ? (
         <button onClick={handleLogin} className="login-button">
@@ -94,13 +106,12 @@ const App: React.FC = () => {
           <IconButton className="logout-button" onClick={handleLogout}>
             <LogoutIcon />
           </IconButton>
+          <DiaryDrawer open={isDrawerOpen} onClose={handleCloseModal} />
           <Box className="notes-container">
             {notes.map((note) => (
               <Paper key={note.id} className="note">
-                <Typography variant="body2" color="textSecondary">
-                  {note.date}
-                </Typography>
-                <Typography variant="body1">{note.content}</Typography>
+                <Typography className="note-date">{note.date}</Typography>
+                <Typography className="note-text">{note.content}</Typography>
               </Paper>
             ))}
           </Box>

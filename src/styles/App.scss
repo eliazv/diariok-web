@@ -3,7 +3,8 @@ $light-brown: #d4a373;
 $dark-brown: #b5835a;
 $light-gray: #f9f9f9;
 $border-color: #ddd;
-$background-color: #ff0d0d;
+$background-color: rgb(25, 25, 25);
+$note-color: #25282a;
 
 .app {
   width: 100%;
@@ -15,17 +16,21 @@ $background-color: #ff0d0d;
   height: 100vh;
 
   .notes-container {
+    color: $light-gray;
     margin-bottom: 1200px;
-    background-color: $background-color;
     overflow-y: auto;
   }
 
   .note {
-    background-color: $light-gray;
+    color: $light-gray;
+    background-color: $note-color;
     padding: 10px;
     margin-bottom: 10px;
     border-radius: 15px;
-    border: 1px solid $border-color;
+    // border: 1px solid $border-color;
+    .note-date {
+      color: #b5835a;
+    }
   }
 
   .new-note-container {
