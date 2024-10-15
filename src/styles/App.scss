@@ -58,6 +58,7 @@ $b-radius: 25px;
     max-width: 750px;
     background-color: $note-color;
     border-radius: $b-radius;
+    border: 2px solid $background-color;
 
     .new-note-input {
       border-radius: 15px !important;
