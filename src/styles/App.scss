@@ -18,9 +18,18 @@ $b-radius: 25px;
   position: relative;
   height: 100vh;
   transition: margin-left 0.3s ease;
+  width: 100%;
+
+  @media (max-width: 600px) {
+    max-width: 100%;
+    padding: 10px;
+  }
 
   &.drawer-open {
     margin-left: 300px;
+    @media (max-width: 600px) {
+      margin-left: 0;
+    }
   }
 
   .notes-container {
@@ -31,7 +40,7 @@ $b-radius: 25px;
   .note {
     color: $text-white;
     background-color: $note-color;
-    padding: 10px;
+    padding: 15px;
     margin-bottom: 10px;
     border-radius: $b-radius;
     .note-date {
@@ -43,22 +52,21 @@ $b-radius: 25px;
     display: flex;
     align-items: center;
     position: fixed;
-    bottom: 10px;
+    bottom: 20px;
     width: 90%;
-    max-width: 800px;
+    max-width: 750px;
     background-color: $note-color;
     border-radius: $b-radius;
 
     .new-note-input {
       border-radius: 15px !important;
       flex-grow: 1;
-      margin-right: 10px;
       border-radius: $b-radius;
       border: none;
     }
     .css-xrmkj5-MuiInputBase-root-MuiOutlinedInput-root {
       border-radius: $b-radius;
-      margin: 5px;
+      margin: 10px;
     }
 
     .send-button {
