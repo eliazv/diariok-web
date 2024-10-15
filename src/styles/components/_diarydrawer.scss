@@ -1,0 +1,38 @@
+.diarydrawer {
+  background-color: $note-color;
+  width: 250px;
+  margin: 10px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+
+  .MuiPaper-root {
+    width: 250px;
+    margin: 15px;
+    border-radius: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    background-color: $note-color;
+  }
+
+  .drawer-content {
+    padding: 16px;
+    background-color: $note-color;
+  }
+
+  .title {
+    font-weight: 700 !important;
+    font-size: 2rem !important;
+    color: aqua;
+  }
+
+  button {
+    color: $text-white;
+    background-color: $note-color;
+    border: none;
+  }
+  .open-drawer-icon {
+    color: $text-white;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+  }
+}

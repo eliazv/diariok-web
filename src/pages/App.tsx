@@ -23,16 +23,8 @@ import {
   TextField,
   Paper,
   Box,
-  Drawer,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-  Button,
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
-import LogoutIcon from "@mui/icons-material/Logout";
-import CloseIcon from "@mui/icons-material/Close";
 import DiaryDrawer from "../components/DiaryDrawer";
 
 interface Note {
@@ -70,6 +62,9 @@ const App: React.FC = () => {
   const handleCloseModal = () => {
     setDrawerOpen(false);
   };
+  const handleOpenModal = () => {
+    setDrawerOpen(true);
+  };
 
   const handleAddNote = async () => {
     const today = new Date().toLocaleDateString();
@@ -94,19 +89,18 @@ const App: React.FC = () => {
 
   return (
     <Container maxWidth="sm" className="app">
-      <Typography variant="h4" gutterBottom>
-        Diariok
-      </Typography>
       {!user ? (
         <button onClick={handleLogin} className="login-button">
           Login with Google
         </button>
       ) : (
         <>
-          <IconButton className="logout-button" onClick={handleLogout}>
-            <LogoutIcon />
-          </IconButton>
-          <DiaryDrawer open={isDrawerOpen} onClose={handleCloseModal} />
+          <DiaryDrawer
+            open={isDrawerOpen}
+            onOpen={handleOpenModal}
+            onClose={handleCloseModal}
+            handleLogout={handleLogout}
+          />
           <Box className="notes-container">
             {notes.map((note) => (
               <Paper key={note.id} className="note">

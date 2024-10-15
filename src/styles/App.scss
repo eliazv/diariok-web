@@ -1,10 +1,18 @@
 $light-yellow: #f4d35e;
 $light-brown: #d4a373;
 $dark-brown: #b5835a;
-$light-gray: #f9f9f9;
 $border-color: #ddd;
 $background-color: rgb(25, 25, 25);
 $note-color: #25282a;
+$text-white: #f9f9f9;
+$error: #d65858;
+
+@import "components/diarydrawer";
+
+// .drawer-content {
+//   padding: 16px;
+//   background-color: $note-color;
+// }
 
 .app {
   width: 100%;
@@ -16,13 +24,13 @@ $note-color: #25282a;
   height: 100vh;
 
   .notes-container {
-    color: $light-gray;
+    color: $text-white;
     margin-bottom: 1200px;
     overflow-y: auto;
   }
 
   .note {
-    color: $light-gray;
+    color: $text-white;
     background-color: $note-color;
     padding: 10px;
     margin-bottom: 10px;
@@ -40,7 +48,7 @@ $note-color: #25282a;
     bottom: 0;
     width: 90%;
     max-width: 800px;
-    background-color: #fff;
+    background-color: $note-color;
     border-top: 1px solid $border-color;
 
     .new-note-input {
@@ -74,13 +82,10 @@ $note-color: #25282a;
   }
 
   .logout-button {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    color: $light-brown;
+    // color: $light-brown;
 
     &:hover {
-      color: $dark-brown;
+      color: $error;
     }
   }
 }
