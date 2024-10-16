@@ -148,11 +148,12 @@ const App: React.FC = () => {
           <Box className="new-note-container">
             <TextField
               multiline
-              rows={2}
+              minRows={2}
+              maxRows={10}
               variant="outlined"
               value={newNote}
               onChange={(e) => setNewNote(e.target.value)}
-              placeholder="Write a new note..."
+              placeholder="Write a note..."
               className="new-note-input"
             />
             <IconButton
