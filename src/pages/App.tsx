@@ -29,6 +29,7 @@ import {
 import SendIcon from "@mui/icons-material/Send";
 import DiaryDrawer from "../components/DiaryDrawer";
 import ReactMarkdown from "react-markdown";
+import Login from "../components/Login";
 
 interface Note {
   id: string;
@@ -121,9 +122,7 @@ const App: React.FC = () => {
       className={`app ${isDrawerOpen ? "drawer-open" : ""}`}
     >
       {!user ? (
-        <button onClick={handleLogin} className="login-button">
-          Login with Google
-        </button>
+        <Login handleLogin={handleLogin} />
       ) : (
         <>
           <DiaryDrawer

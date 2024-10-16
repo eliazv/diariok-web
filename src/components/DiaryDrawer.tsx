@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
   IconButton,
   Box,
@@ -24,6 +25,19 @@ const DiaryDrawer = ({
   onClose,
   handleLogout,
 }: DiaryDrawerProps) => {
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 1100 && open) {
+        onClose();
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [open, onClose]);
+
   return (
     <div className="diarydrawer">
       {!open && (

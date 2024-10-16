@@ -9,6 +9,7 @@ $error: #d65858;
 $b-radius: 25px;
 
 @import "components/diarydrawer";
+@import "components/login";
 
 .app {
   max-width: 800px !important;
@@ -27,8 +28,8 @@ $b-radius: 25px;
 
   &.drawer-open {
     margin-left: 300px;
-    @media (max-width: 600px) {
-      margin-left: 0;
+    @media (max-width: 1100px) {
+      margin-left: auto;
     }
   }
 
@@ -59,6 +60,7 @@ $b-radius: 25px;
     background-color: $note-color;
     border-radius: $b-radius;
     border: 2px solid $background-color;
+    box-shadow: 0px 0px 14px 6px $background-color;
 
     .new-note-input {
       border-radius: 15px !important;
@@ -82,19 +84,6 @@ $b-radius: 25px;
         color: $text-white;
         background-color: $brown-accent;
       }
-    }
-  }
-
-  .login-button {
-    background-color: $light-yellow;
-    padding: 10px;
-    border: none;
-    border-radius: $b-radius;
-    cursor: pointer;
-    color: white;
-
-    &:hover {
-      background-color: darken($light-yellow, 10%);
     }
   }
 

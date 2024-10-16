@@ -1,0 +1,37 @@
+.login {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+
+  &-container {
+    padding: 10px;
+    border-radius: $b-radius;
+    border: 2px solid $brown-accent;
+  }
+
+  &-title {
+    font-size: 3rem;
+    font-weight: bold;
+    color: $brown-accent;
+    margin: 0;
+    text-transform: uppercase;
+  }
+
+  &-button {
+    padding: 0.8rem 1.5rem;
+    background-color: $text-white;
+    color: $brown-accent;
+    border: 2px solid $brown-accent;
+    border-radius: $b-radius;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: $brown-accent;
+      color: $text-white;
+    }
+  }
+}
