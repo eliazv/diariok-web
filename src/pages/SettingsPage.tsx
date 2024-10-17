@@ -57,9 +57,20 @@ const SettingsPage: React.FC = () => {
   };
 
   return (
-    <div className="notes-container">
-      <div className="note">
-        <h3>Statistiche</h3>
+    <div className="page-container settingspage">
+      <h3>Impostazioni</h3>
+      <div className="user-info">
+        <img
+          src={auth.currentUser?.photoURL ?? "path/to/default/image.png"}
+          alt="User Avatar"
+          className="user-avatar"
+        />
+        <div className="user-texts">
+          <p>{auth.currentUser?.displayName}</p>
+          <p>{auth.currentUser?.email}</p>
+        </div>
+      </div>
+      <div className="btn-wrapper">
         <Button
           onClick={handleExportNotes}
           variant="contained"
@@ -67,9 +78,11 @@ const SettingsPage: React.FC = () => {
         >
           Export Notes
         </Button>
+
         <Button
+          variant="outlined"
+          color="error"
           onClick={handleLogout}
-          variant="contained"
           startIcon={<LogoutIcon />}
         >
           Logout

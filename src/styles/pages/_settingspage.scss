@@ -1,0 +1,36 @@
+.settingspage {
+  .user-info {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    margin: 20px 0;
+    border: 1px solid $brown-accent;
+    border-radius: $b-radius;
+  }
+
+  .user-texts {
+    display: grid;
+    grid-template-rows: auto auto;
+    word-wrap: break-word;
+    word-break: break-word;
+  }
+
+  .user-info p {
+    margin: 5px;
+  }
+
+  .user-avatar {
+    margin: 10px;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+  }
+
+  .btn-wrapper {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+}

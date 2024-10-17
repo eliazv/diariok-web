@@ -10,6 +10,7 @@ $b-radius: 25px;
 
 @import "components/diarydrawer";
 @import "components/login";
+@import "pages/settingspage";
 
 .app {
   max-width: 800px !important;
@@ -25,11 +26,27 @@ $b-radius: 25px;
     max-width: 100%;
     padding: 10px;
   }
+  .user-info {
+    margin: 20px 0;
+    border: 1px solid green($color: #000000);
+  }
 
   &.drawer-open {
     margin-left: 300px;
     @media (max-width: 1100px) {
       margin-left: auto;
+    }
+  }
+
+  .page-container {
+    overflow-y: auto;
+    color: $text-white;
+    background-color: $note-color;
+    padding: 20px 20px 30px 20px;
+    border-radius: $b-radius;
+    .btn-wrapper {
+      display: flex;
+      justify-content: space-between;
     }
   }
 

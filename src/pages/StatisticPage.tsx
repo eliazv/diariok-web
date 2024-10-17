@@ -2,8 +2,8 @@ import React from "react";
 
 const StatisticsPage: React.FC = () => {
   return (
-    <div className="notes-container">
-      <div className="note">Statistiche</div>
+    <div className="page-container">
+      <h3>Statistiche</h3>
     </div>
   );
 };

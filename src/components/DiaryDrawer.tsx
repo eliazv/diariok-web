@@ -11,7 +11,9 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
-import LogoutIcon from "@mui/icons-material/Logout";
+import NoteIcon from "@mui/icons-material/Note"; // Icona per le note
+import ShowChartIcon from "@mui/icons-material/ShowChart"; // Icona per le statistiche
+import SettingsIcon from "@mui/icons-material/Settings"; // Icona per le impostazioni
 
 import "../styles/App.scss";
 
@@ -47,6 +49,14 @@ const DiaryDrawer = ({
     };
   }, [open, onClose]);
 
+  const handleMenuItemClick = (page: string) => {
+    onSelectPage(page);
+
+    if (window.innerWidth < 1100) {
+      onClose();
+    }
+  };
+
   return (
     <div className="diarydrawer">
       {!open && (
@@ -64,32 +74,33 @@ const DiaryDrawer = ({
                 <CloseIcon />
               </IconButton>
             </ListItem>
+
             <ListItemButton
+              className="menu-item"
               selected={selectedPage === "note"}
-              onClick={() => onSelectPage("note")}
+              onClick={() => handleMenuItemClick("note")}
             >
+              <NoteIcon className="menu-icon" />
               <ListItemText primary="Note" />
             </ListItemButton>
 
             <ListItemButton
+              className="menu-item"
               selected={selectedPage === "statistiche"}
-              onClick={() => onSelectPage("statistiche")}
+              onClick={() => handleMenuItemClick("statistiche")}
             >
+              <ShowChartIcon className="menu-icon" />
               <ListItemText primary="Statistiche" />
             </ListItemButton>
 
             <ListItemButton
+              className="menu-item"
               selected={selectedPage === "impostazioni"}
-              onClick={() => onSelectPage("impostazioni")}
+              onClick={() => handleMenuItemClick("impostazioni")}
             >
+              <SettingsIcon className="menu-icon" />
               <ListItemText primary="Impostazioni" />
             </ListItemButton>
-            <ListItem component="button">
-              <ListItemText primary="Esci" />
-              <IconButton className="logout-button" onClick={handleLogout}>
-                <LogoutIcon />
-              </IconButton>
-            </ListItem>
           </List>
         </Box>
       </Drawer>

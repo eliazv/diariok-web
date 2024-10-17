@@ -57,4 +57,13 @@
       color: $brown-accent;
     }
   }
+
+  .menu-item {
+    border-radius: $b-radius;
+    color: $text-white;
+  }
+
+  .menu-icon {
+    margin-right: 10px;
+  }
 }
