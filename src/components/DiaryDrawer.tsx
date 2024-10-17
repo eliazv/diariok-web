@@ -6,10 +6,13 @@ import {
   List,
   ListItem,
   ListItemText,
+  Button,
+  ListItemButton,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import LogoutIcon from "@mui/icons-material/Logout";
+import DownloadIcon from "@mui/icons-material/Download";
 import "../styles/App.scss";
 
 type DiaryDrawerProps = {
@@ -17,6 +20,9 @@ type DiaryDrawerProps = {
   onOpen: () => void;
   onClose: () => void;
   handleLogout: () => void;
+  handleExportNotes: () => void;
+  selectedPage: string;
+  onSelectPage: (page: string) => void;
 };
 
 const DiaryDrawer = ({
@@ -24,6 +30,9 @@ const DiaryDrawer = ({
   onOpen,
   onClose,
   handleLogout,
+  handleExportNotes,
+  selectedPage,
+  onSelectPage,
 }: DiaryDrawerProps) => {
   useEffect(() => {
     const handleResize = () => {
@@ -49,21 +58,44 @@ const DiaryDrawer = ({
       <Drawer anchor="left" open={open} onClose={onClose} variant="persistent">
         <Box role="presentation" className="drawer-content">
           <List>
-            <ListItem>
+            <ListItem divider>
               <ListItemText className="title" primary="Diariok" />
               <IconButton className="close-btn" onClick={onClose}>
                 <CloseIcon />
               </IconButton>
             </ListItem>
-            <ListItem component="button">
-              <ListItemText primary="Calendario" />
-            </ListItem>
-            <ListItem component="button">
+            <ListItemButton
+              selected={selectedPage === "note"}
+              onClick={() => onSelectPage("note")}
+            >
+              <ListItemText primary="Note" />
+            </ListItemButton>
+
+            <ListItemButton
+              selected={selectedPage === "statistiche"}
+              onClick={() => onSelectPage("statistiche")}
+            >
               <ListItemText primary="Statistiche" />
-            </ListItem>
-            <ListItem component="button">
+            </ListItemButton>
+
+            <ListItemButton
+              selected={selectedPage === "impostazioni"}
+              onClick={() => onSelectPage("impostazioni")}
+            >
               <ListItemText primary="Impostazioni" />
+            </ListItemButton>
+
+            <ListItem component="button">
+              <Button
+                onClick={handleExportNotes}
+                variant="contained"
+                startIcon={<DownloadIcon />}
+                // endIcon={<DownloadIcon />}
+              >
+                Export Notes
+              </Button>
             </ListItem>
+
             <ListItem component="button">
               <ListItemText primary="Esci" />
               <IconButton className="logout-button" onClick={handleLogout}>

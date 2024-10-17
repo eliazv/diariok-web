@@ -18,35 +18,28 @@ import {
   signOut,
   User,
 } from "firebase/auth";
-import {
-  Container,
-  Typography,
-  IconButton,
-  TextField,
-  Paper,
-  Box,
-} from "@mui/material";
-import SendIcon from "@mui/icons-material/Send";
+import { Container, Typography, Paper, Box } from "@mui/material";
 import DiaryDrawer from "../components/DiaryDrawer";
 import ReactMarkdown from "react-markdown";
 import Login from "../components/Login";
-
-interface Note {
-  id: string;
-  content: string;
-  date: string;
-}
+import { Note } from "../types/Note";
+import NotesPage from "./NotesPage";
+import SettingsPage from "./SettingsPage";
+import StatisticsPage from "./StatisticPage";
 
 const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
   const [notes, setNotes] = useState<Note[]>([]);
   const [newNote, setNewNote] = useState<string>("");
   const [isDrawerOpen, setDrawerOpen] = useState<boolean>(true);
+  const [selectedPage, setSelectedPage] = useState<string>("note");
   const lastNoteRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
+      setLoading(false);
       if (currentUser) {
         const notesRef = collection(db, "notes");
         const q = query(notesRef, where("userId", "==", currentUser.uid));
@@ -116,6 +109,22 @@ const App: React.FC = () => {
     signOut(auth);
   };
 
+  const handleExportNotes = () => {
+    const today = new Date().toLocaleDateString();
+    const notesText = notes
+      .map((note) => `${note.date}\n${note.content}`)
+      .join("\n\n");
+    const blob = new Blob([notesText], { type: "text/plain" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `Diariok-notes-${today}.txt`;
+    link.click();
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <Container
       maxWidth="sm"
@@ -130,40 +139,32 @@ const App: React.FC = () => {
             onOpen={handleOpenModal}
             onClose={handleCloseModal}
             handleLogout={handleLogout}
+            handleExportNotes={handleExportNotes}
+            selectedPage={selectedPage}
+            onSelectPage={setSelectedPage}
           />
-          <Box className="notes-container">
-            {notes.map((note, index) => (
-              <Paper
-                key={note.id}
-                className="note"
-                ref={index === notes.length - 1 ? lastNoteRef : null}
-              >
-                <Typography className="note-date">{note.date}</Typography>
-                <ReactMarkdown className="note-text">
-                  {note.content}
-                </ReactMarkdown>
-              </Paper>
-            ))}
-          </Box>
-          <Box className="new-note-container">
-            <TextField
-              multiline
-              minRows={2}
-              maxRows={10}
-              variant="outlined"
-              value={newNote}
-              onChange={(e) => setNewNote(e.target.value)}
-              placeholder="Write a note..."
-              className="new-note-input"
+          {selectedPage === "note" && (
+            <Box className="notes-container">
+              {notes.map((note) => (
+                <Paper key={note.id} className="note">
+                  <Typography className="note-date">{note.date}</Typography>
+                  <ReactMarkdown className="note-text">
+                    {note.content}
+                  </ReactMarkdown>
+                </Paper>
+              ))}
+            </Box>
+          )}
+          {selectedPage === "statistiche" && <StatisticsPage />}
+          {selectedPage === "impostazioni" && <SettingsPage />}
+          {selectedPage === "note" && (
+            <NotesPage
+              notes={notes}
+              newNote={newNote}
+              setNewNote={setNewNote}
+              handleAddNote={handleAddNote}
             />
-            <IconButton
-              onClick={handleAddNote}
-              className="send-button"
-              disabled={!newNote.trim()}
-            >
-              <SendIcon />
-            </IconButton>
-          </Box>
+          )}
         </>
       )}
     </Container>
