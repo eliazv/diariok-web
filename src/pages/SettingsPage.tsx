@@ -42,13 +42,15 @@ const SettingsPage: React.FC = () => {
 
   const handleExportNotes = () => {
     const today = new Date().toLocaleDateString();
-    const notesText = notes
-      .map((note) => `${note.date}\n${note.content}`)
+
+    const notesMarkdown = notes
+      .map((note) => `# ${note.date}\n\n${note.content}`)
       .join("\n\n");
-    const blob = new Blob([notesText], { type: "text/plain" });
+
+    const blob = new Blob([notesMarkdown], { type: "text/markdown" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = `Diariok-notes-${today}.txt`;
+    link.download = `Diariok-notes-${today}.md`;
     link.click();
   };
 

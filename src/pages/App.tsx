@@ -14,7 +14,7 @@ import DiaryDrawer from "../components/DiaryDrawer";
 import Login from "../components/Login";
 import NotesPage from "./NotesPage";
 import SettingsPage from "./SettingsPage";
-import StatisticsPage from "./StatisticPage";
+import StatisticsPage from "./StatisticsPage";
 
 const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -63,12 +63,8 @@ const App: React.FC = () => {
             open={isDrawerOpen}
             onOpen={handleOpenModal}
             onClose={handleCloseModal}
-            handleLogout={handleLogout}
             selectedPage={selectedPage}
             onSelectPage={setSelectedPage}
-            handleExportNotes={function (): void {
-              throw new Error("Function not implemented.");
-            }}
           />
           {selectedPage === "note" && <NotesPage />}
           {selectedPage === "statistiche" && <StatisticsPage />}

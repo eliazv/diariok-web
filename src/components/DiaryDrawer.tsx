@@ -6,14 +6,13 @@ import {
   List,
   ListItem,
   ListItemText,
-  Button,
   ListItemButton,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
-import NoteIcon from "@mui/icons-material/Note"; // Icona per le note
-import ShowChartIcon from "@mui/icons-material/ShowChart"; // Icona per le statistiche
-import SettingsIcon from "@mui/icons-material/Settings"; // Icona per le impostazioni
+import NoteIcon from "@mui/icons-material/Note";
+import ShowChartIcon from "@mui/icons-material/ShowChart";
+import SettingsIcon from "@mui/icons-material/Settings";
 
 import "../styles/App.scss";
 
@@ -21,8 +20,6 @@ type DiaryDrawerProps = {
   open: boolean;
   onOpen: () => void;
   onClose: () => void;
-  handleLogout: () => void;
-  handleExportNotes: () => void;
   selectedPage: string;
   onSelectPage: (page: string) => void;
 };
@@ -31,8 +28,6 @@ const DiaryDrawer = ({
   open,
   onOpen,
   onClose,
-  handleLogout,
-  handleExportNotes,
   selectedPage,
   onSelectPage,
 }: DiaryDrawerProps) => {
