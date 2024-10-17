@@ -12,7 +12,7 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import LogoutIcon from "@mui/icons-material/Logout";
-import DownloadIcon from "@mui/icons-material/Download";
+
 import "../styles/App.scss";
 
 type DiaryDrawerProps = {
@@ -84,18 +84,6 @@ const DiaryDrawer = ({
             >
               <ListItemText primary="Impostazioni" />
             </ListItemButton>
-
-            <ListItem component="button">
-              <Button
-                onClick={handleExportNotes}
-                variant="contained"
-                startIcon={<DownloadIcon />}
-                // endIcon={<DownloadIcon />}
-              >
-                Export Notes
-              </Button>
-            </ListItem>
-
             <ListItem component="button">
               <ListItemText primary="Esci" />
               <IconButton className="logout-button" onClick={handleLogout}>

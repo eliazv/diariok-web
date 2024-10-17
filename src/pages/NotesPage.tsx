@@ -1,24 +1,49 @@
-import React, { useRef, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Note } from "../types/Note";
-import { Typography, TextField, IconButton } from "@mui/material";
+import { Typography, TextField, IconButton, Paper, Box } from "@mui/material";
+import { auth, db } from "../firebase";
+import {
+  collection,
+  query,
+  where,
+  onSnapshot,
+  addDoc,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
 import ReactMarkdown from "react-markdown";
 import SendIcon from "@mui/icons-material/Send";
 
-interface NotesPageProps {
-  notes: Note[];
-  newNote: string;
-  setNewNote: (value: string) => void;
-  handleAddNote: () => void;
-}
-
-const NotesPage: React.FC<NotesPageProps> = ({
-  notes,
-  newNote,
-  setNewNote,
-  handleAddNote,
-}) => {
-  console.log("notes :", notes);
+const NotesPage: React.FC = () => {
+  const [notes, setNotes] = useState<Note[]>([]);
+  const [newNote, setNewNote] = useState<string>("");
   const lastNoteRef = useRef<HTMLDivElement | null>(null);
+  const user = auth.currentUser;
+
+  useEffect(() => {
+    if (user) {
+      const notesRef = collection(db, "notes");
+      const q = query(notesRef, where("userId", "==", user.uid));
+      const unsubscribeSnapshot = onSnapshot(q, (snapshot) => {
+        const notesData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          content: doc.data().content as string,
+          date: doc.data().date as string,
+        }));
+
+        const parseDate = (dateStr: string) => {
+          const [day, month, year] = dateStr.split("/").map(Number);
+          return new Date(year, month - 1, day);
+        };
+
+        const sortedNotes = notesData.sort(
+          (a, b) => parseDate(a.date).getTime() - parseDate(b.date).getTime()
+        );
+        setNotes(sortedNotes);
+      });
+      return () => unsubscribeSnapshot();
+    }
+  }, []);
 
   useEffect(() => {
     if (lastNoteRef.current) {
@@ -26,20 +51,37 @@ const NotesPage: React.FC<NotesPageProps> = ({
     }
   }, [notes]);
 
+  const handleAddNote = async () => {
+    const today = new Date().toLocaleDateString();
+    if (user) {
+      const existingNote = notes.find((note) => note.date === today);
+
+      if (existingNote) {
+        const noteDocRef = doc(db, "notes", existingNote.id);
+        await updateDoc(noteDocRef, {
+          content: `${existingNote.content}\n\n${newNote}`,
+        });
+      } else {
+        await addDoc(collection(db, "notes"), {
+          content: newNote,
+          date: today,
+          userId: user.uid,
+        });
+      }
+      setNewNote("");
+    }
+  };
+
   return (
     <>
-      <div className="notes-container">
-        {notes.map((note, index) => (
-          <div
-            key={note.id}
-            className="note"
-            ref={index === notes.length - 1 ? lastNoteRef : null}
-          >
+      <Box className="notes-container">
+        {notes.map((note) => (
+          <Paper key={note.id} className="note" ref={lastNoteRef}>
             <Typography className="note-date">{note.date}</Typography>
             <ReactMarkdown className="note-text">{note.content}</ReactMarkdown>
-          </div>
+          </Paper>
         ))}
-      </div>
+      </Box>
       <div className="new-note-container">
         <TextField
           multiline
