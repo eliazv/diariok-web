@@ -6,7 +6,6 @@ import {
   onAuthStateChanged,
   GoogleAuthProvider,
   signInWithPopup,
-  signOut,
   User,
 } from "firebase/auth";
 import { Container } from "@mui/material";
@@ -40,10 +39,6 @@ const App: React.FC = () => {
   const handleLogin = async () => {
     const provider = new GoogleAuthProvider();
     await signInWithPopup(auth, provider);
-  };
-
-  const handleLogout = () => {
-    signOut(auth);
   };
 
   if (loading) {

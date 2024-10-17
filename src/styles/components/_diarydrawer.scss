@@ -34,10 +34,9 @@
       height: 100%;
     }
   }
-
   .title {
-    font-weight: 700 !important;
-    font-size: 2rem !important;
+    justify-content: space-between;
+    font-weight: 600;
     color: $brown-accent;
   }
 

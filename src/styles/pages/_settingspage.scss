@@ -4,7 +4,7 @@
     grid-template-columns: auto 1fr;
     align-items: center;
     margin: 20px 0;
-    border: 1px solid $brown-accent;
+    border: 1px solid $brown-accent !important;
     border-radius: $b-radius;
   }
 

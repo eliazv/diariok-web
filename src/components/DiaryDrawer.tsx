@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
-import NoteIcon from "@mui/icons-material/Note";
+import NoteIcon from "@mui/icons-material/AutoStories";
 import ShowChartIcon from "@mui/icons-material/ShowChart";
 import SettingsIcon from "@mui/icons-material/Settings";
 
@@ -63,8 +63,8 @@ const DiaryDrawer = ({
       <Drawer anchor="left" open={open} onClose={onClose} variant="persistent">
         <Box role="presentation" className="drawer-content">
           <List>
-            <ListItem divider>
-              <ListItemText className="title" primary="Diariok" />
+            <ListItem divider className="title">
+              <h2>Diariok</h2>
               <IconButton className="close-btn" onClick={onClose}>
                 <CloseIcon />
               </IconButton>
