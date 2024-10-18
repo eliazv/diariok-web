@@ -63,7 +63,7 @@ const DiaryDrawer = ({
       <Drawer anchor="left" open={open} onClose={onClose} variant="persistent">
         <Box role="presentation" className="drawer-content">
           <List>
-            <ListItem divider className="title">
+            <ListItem className="title">
               <h2>Diariok</h2>
               <IconButton className="close-btn" onClick={onClose}>
                 <CloseIcon />

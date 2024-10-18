@@ -63,7 +63,9 @@
     border-radius: $b-radius;
     color: $text-white;
   }
-
+  .css-4bx69l-MuiButtonBase-root-MuiListItemButton-root.Mui-selected {
+    background-color: $brown-accent;
+  }
   .menu-icon {
     margin-right: 10px;
   }
