@@ -43,7 +43,7 @@ const NotesPage: React.FC = () => {
       });
       return () => unsubscribeSnapshot();
     }
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     if (lastNoteRef.current) {

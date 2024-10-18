@@ -65,6 +65,9 @@
   }
   .css-4bx69l-MuiButtonBase-root-MuiListItemButton-root.Mui-selected {
     background-color: $brown-accent;
+    &:hover {
+      background-color: $light-brown;
+    }
   }
   .menu-icon {
     margin-right: 10px;
