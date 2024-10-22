@@ -8,7 +8,7 @@ import {
   signInWithPopup,
   User,
 } from "firebase/auth";
-import { Container } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 import DiaryDrawer from "../components/DiaryDrawer";
 import Login from "../components/Login";
 import NotesPage from "./NotesPage";
@@ -42,14 +42,16 @@ const App: React.FC = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="loading-container">
+        <CircularProgress />
+        <h6>Authenticating...</h6>
+      </div>
+    );
   }
 
   return (
-    <Container
-      maxWidth="sm"
-      className={`app ${isDrawerOpen ? "drawer-open" : ""}`}
-    >
+    <div className={`app ${isDrawerOpen ? "drawer-open" : ""}`}>
       {!user ? (
         <Login handleLogin={handleLogin} />
       ) : (
@@ -66,7 +68,7 @@ const App: React.FC = () => {
           {selectedPage === "impostazioni" && <SettingsPage />}
         </>
       )}
-    </Container>
+    </div>
   );
 };
 

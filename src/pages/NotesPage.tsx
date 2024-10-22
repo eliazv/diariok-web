@@ -10,13 +10,17 @@ import {
   addDoc,
   doc,
   updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import ReactMarkdown from "react-markdown";
 import SendIcon from "@mui/icons-material/Send";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 
 const NotesPage: React.FC = () => {
   const [notes, setNotes] = useState<Note[]>([]);
   const [newNote, setNewNote] = useState<string>("");
+  const [editingNote, setEditingNote] = useState<Note | null>(null);
   const lastNoteRef = useRef<HTMLDivElement | null>(null);
   const user = auth.currentUser;
 
@@ -72,13 +76,51 @@ const NotesPage: React.FC = () => {
     }
   };
 
+  const handleDeleteNote = async (id: string) => {
+    await deleteDoc(doc(db, "notes", id));
+  };
+
+  const handleEditNote = (note: Note) => {
+    setEditingNote(note);
+    setNewNote(note.content);
+  };
+
+  const handleUpdateNote = async () => {
+    if (editingNote) {
+      const noteDocRef = doc(db, "notes", editingNote.id);
+      await updateDoc(noteDocRef, {
+        content: newNote,
+      });
+      setEditingNote(null);
+      setNewNote("");
+    }
+  };
+
+  const formatDate = (dateStr: string) => {
+    const [day, month, year] = dateStr.split("/").map(Number);
+    const date = new Date(year, month - 1, day);
+    return date.toLocaleDateString("it-IT", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+  };
+
   return (
     <>
       <Box className="notes-container">
         {notes.map((note) => (
           <Paper key={note.id} className="note" ref={lastNoteRef}>
-            <Typography className="note-date">{note.date}</Typography>
+            <Typography className="note-date">
+              {formatDate(note.date)}
+            </Typography>
             <ReactMarkdown className="note-text">{note.content}</ReactMarkdown>
+            <IconButton onClick={() => handleEditNote(note)}>
+              <EditIcon />
+            </IconButton>
+            <IconButton onClick={() => handleDeleteNote(note.id)}>
+              <DeleteIcon />
+            </IconButton>
           </Paper>
         ))}
       </Box>
@@ -94,7 +136,7 @@ const NotesPage: React.FC = () => {
           className="new-note-input"
         />
         <IconButton
-          onClick={handleAddNote}
+          onClick={editingNote ? handleUpdateNote : handleAddNote}
           className="send-button"
           disabled={!newNote.trim()}
         >
