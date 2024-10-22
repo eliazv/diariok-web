@@ -8,7 +8,6 @@ import {
   Box,
   Dialog,
   DialogTitle,
-  DialogContent,
   DialogActions,
   Button,
 } from "@mui/material";
@@ -25,15 +24,16 @@ import {
 } from "firebase/firestore";
 import ReactMarkdown from "react-markdown";
 import SendIcon from "@mui/icons-material/Send";
-import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import CancelIcon from "@mui/icons-material/Cancel";
 
 const NotesPage: React.FC = () => {
   const [notes, setNotes] = useState<Note[]>([]);
   const [newNote, setNewNote] = useState<string>("");
   const [editingNote, setEditingNote] = useState<Note | null>(null);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState<boolean>(false);
   const [noteToDelete, setNoteToDelete] = useState<Note | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const lastNoteRef = useRef<HTMLDivElement | null>(null);
   const user = auth.currentUser;
 
@@ -71,78 +71,65 @@ const NotesPage: React.FC = () => {
   const handleAddNote = async () => {
     const today = new Date().toLocaleDateString();
     if (user) {
-      const existingNote = notes.find((note) => note.date === today);
-
-      if (existingNote) {
-        const noteDocRef = doc(db, "notes", existingNote.id);
+      if (editingNote) {
+        const noteDocRef = doc(db, "notes", editingNote.id);
         await updateDoc(noteDocRef, {
-          content: `${existingNote.content}\n\n${newNote}`,
-        });
-      } else {
-        await addDoc(collection(db, "notes"), {
           content: newNote,
-          date: today,
-          userId: user.uid,
         });
+        setEditingNote(null);
+      } else {
+        const existingNote = notes.find((note) => note.date === today);
+
+        if (existingNote) {
+          const noteDocRef = doc(db, "notes", existingNote.id);
+          await updateDoc(noteDocRef, {
+            content: `${existingNote.content}\n\n${newNote}`,
+          });
+        } else {
+          await addDoc(collection(db, "notes"), {
+            content: newNote,
+            date: today,
+            userId: user.uid,
+          });
+        }
       }
       setNewNote("");
     }
+  };
+
+  const handleEditNote = (note: Note) => {
+    setNewNote(note.content);
+    setEditingNote(note);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingNote(null);
+    setNewNote("");
   };
 
   const handleDeleteNote = async () => {
     if (noteToDelete) {
       await deleteDoc(doc(db, "notes", noteToDelete.id));
       setNoteToDelete(null);
-      setShowDeleteConfirm(false);
+      setDeleteDialogOpen(false);
     }
-  };
-
-  const handleEditNote = (note: Note) => {
-    setEditingNote(note);
-    setNewNote(note.content);
-  };
-
-  const handleUpdateNote = async () => {
-    if (editingNote) {
-      const noteDocRef = doc(db, "notes", editingNote.id);
-      await updateDoc(noteDocRef, {
-        content: newNote,
-      });
-      setEditingNote(null);
-      setNewNote("");
-    }
-  };
-
-  const formatDate = (dateStr: string) => {
-    const [day, month, year] = dateStr.split("/").map(Number);
-    const date = new Date(year, month - 1, day);
-    return date.toLocaleDateString("it-IT", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    });
   };
 
   const openDeleteConfirm = (note: Note) => {
     setNoteToDelete(note);
-    setShowDeleteConfirm(true);
+    setDeleteDialogOpen(true);
   };
 
   const closeDeleteConfirm = () => {
-    setShowDeleteConfirm(false);
     setNoteToDelete(null);
+    setDeleteDialogOpen(false);
   };
 
   const getDateReference = () => {
     if (editingNote) {
-      return `Modificando la nota del ${formatDate(editingNote.date)}`;
+      return `Modificando la nota del ${editingNote.date}`;
     }
-    const today = new Date().toLocaleDateString("it-IT", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    });
-    return `Aggiungendo nota per oggi: ${today}`;
+    return `Creando nota del ${new Date().toLocaleDateString()}`;
   };
 
   return (
@@ -150,21 +137,41 @@ const NotesPage: React.FC = () => {
       <Box className="notes-container">
         {notes.map((note) => (
           <Paper key={note.id} className="note" ref={lastNoteRef}>
-            <Typography className="note-date">
-              {formatDate(note.date)}
-            </Typography>
+            <Typography className="note-date">{note.date}</Typography>
+
+            <div className="icon-container">
+              <IconButton
+                className="edit-icon"
+                onClick={() => handleEditNote(note)}
+              >
+                <EditIcon />
+              </IconButton>
+              <IconButton
+                className="delete-icon"
+                onClick={() => openDeleteConfirm(note)}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </div>
+
             <ReactMarkdown className="note-text">{note.content}</ReactMarkdown>
-            <IconButton onClick={() => handleEditNote(note)}>
-              <EditIcon />
-            </IconButton>
-            <IconButton onClick={() => openDeleteConfirm(note)}>
-              <DeleteIcon />
-            </IconButton>
           </Paper>
         ))}
       </Box>
+
       <div className="new-note-container">
-        <Typography variant="subtitle2">{getDateReference()}</Typography>
+        <div className="note-header">
+          <Typography className="note-reference">
+            {getDateReference()}
+          </Typography>
+
+          {editingNote && (
+            <IconButton onClick={handleCancelEdit} className="cancel-button">
+              <CancelIcon />
+            </IconButton>
+          )}
+        </div>
+
         <TextField
           multiline
           minRows={2}
@@ -175,8 +182,9 @@ const NotesPage: React.FC = () => {
           placeholder="Write a note..."
           className="new-note-input"
         />
+
         <IconButton
-          onClick={editingNote ? handleUpdateNote : handleAddNote}
+          onClick={handleAddNote}
           className="send-button"
           disabled={!newNote.trim()}
         >
@@ -184,12 +192,12 @@ const NotesPage: React.FC = () => {
         </IconButton>
       </div>
 
-      {/* Modale conferma eliminazione */}
-      <Dialog open={showDeleteConfirm} onClose={closeDeleteConfirm}>
-        <DialogTitle>Conferma Eliminazione</DialogTitle>
-        <DialogContent>
-          Sei sicuro di voler eliminare questa nota?
-        </DialogContent>
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={closeDeleteConfirm}
+        className="dialog-dark-theme"
+      >
+        <DialogTitle>Confermi l'eliminazione della nota?</DialogTitle>
         <DialogActions>
           <Button onClick={closeDeleteConfirm} color="primary">
             Annulla
@@ -202,5 +210,4 @@ const NotesPage: React.FC = () => {
     </>
   );
 };
-
 export default NotesPage;

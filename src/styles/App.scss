@@ -29,6 +29,7 @@ $b-radius: 25px;
     max-width: 100%;
     padding: 60px 10px 10px 10px;
   }
+
   .user-info {
     margin: 20px 0;
     border: 1px solid green($color: #000000);
@@ -75,9 +76,28 @@ $b-radius: 25px;
     border-radius: $b-radius;
     word-wrap: break-word;
     word-break: break-word;
+    position: relative;
+
     .note-date {
       color: $brown-accent;
       font-weight: 600;
+    }
+
+    .icon-container {
+      position: absolute;
+      right: 15px;
+      bottom: 15px;
+      display: flex;
+      gap: 10px;
+
+      .edit-icon,
+      .delete-icon {
+        color: $light-brown;
+        &:hover {
+          color: $text-white;
+          background-color: $brown-accent;
+        }
+      }
     }
   }
 
@@ -92,17 +112,26 @@ $b-radius: 25px;
     border-radius: $b-radius;
     border: 2px solid $background-color;
     box-shadow: 0px 0px 14px 6px $background-color;
+    padding-top: 20px;
+
+    .note-reference {
+      position: absolute;
+      top: 5px;
+      left: 20px;
+      font-size: 0.9rem;
+      color: $light-brown;
+    }
 
     .new-note-input {
-      border-radius: 15px !important;
       flex-grow: 1;
-      border-radius: $b-radius;
+      margin-right: 10px;
+      border-radius: 15px !important;
       border: none;
     }
+
     .css-xrmkj5-MuiInputBase-root-MuiOutlinedInput-root {
       border-radius: $b-radius;
       background-color: $background-color;
-
       margin: 10px;
     }
 
@@ -114,6 +143,15 @@ $b-radius: 25px;
       &:hover {
         color: $text-white;
         background-color: $brown-accent;
+      }
+    }
+
+    .cancel-button {
+      margin-left: 10px;
+      color: $error;
+      &:hover {
+        color: $text-white;
+        background-color: $error;
       }
     }
   }
