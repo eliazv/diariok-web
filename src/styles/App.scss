@@ -147,7 +147,10 @@ $b-radius: 25px;
     }
 
     .cancel-button {
-      margin-left: 10px;
+      position: absolute;
+      top: -5px;
+      right: 0px;
+      font-size: 0.9rem;
       color: $error;
       &:hover {
         color: $text-white;
