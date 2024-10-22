@@ -1,0 +1,13 @@
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  color: $text-white; // Imposta il colore del testo su bianco
+
+  h6 {
+    font-size: 1.5rem; // Aumenta la dimensione del font
+    margin-top: 10px; // Aggiungi un margine sopra il testo
+  }
+}

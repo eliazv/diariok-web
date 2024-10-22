@@ -8,12 +8,12 @@ import {
   signInWithPopup,
   User,
 } from "firebase/auth";
-import { CircularProgress } from "@mui/material";
 import DiaryDrawer from "../components/DiaryDrawer";
 import Login from "../components/Login";
 import NotesPage from "./NotesPage";
 import SettingsPage from "./SettingsPage";
 import StatisticsPage from "./StatisticsPage";
+import Loading from "../components/Loading";
 
 const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -41,16 +41,9 @@ const App: React.FC = () => {
     await signInWithPopup(auth, provider);
   };
 
-  if (loading) {
-    return (
-      <div className="loading-container">
-        <CircularProgress />
-        <h6>Authenticating...</h6>
-      </div>
-    );
-  }
-
-  return (
+  return loading ? (
+    <Loading />
+  ) : (
     <div className={`app ${isDrawerOpen ? "drawer-open" : ""}`}>
       {!user ? (
         <Login handleLogin={handleLogin} />
