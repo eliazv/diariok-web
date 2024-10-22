@@ -127,9 +127,28 @@ const NotesPage: React.FC = () => {
 
   const getDateReference = () => {
     if (editingNote) {
-      return `Modificando la nota del ${editingNote.date}`;
+      return `Modificando la nota del ${formatDate(editingNote.date)}`;
     }
-    return `Creando nota del ${new Date().toLocaleDateString()}`;
+    return `Creando nota del ${formatDate(new Date().toLocaleDateString())}`;
+  };
+
+  const formatDate = (dateStr: string): string => {
+    const [day, month, year] = dateStr.split("/").map(Number);
+    const monthNames = [
+      "gen",
+      "feb",
+      "mar",
+      "apr",
+      "mag",
+      "giu",
+      "lug",
+      "ago",
+      "set",
+      "ott",
+      "nov",
+      "dic",
+    ];
+    return `${day} ${monthNames[month - 1]} ${year}`;
   };
 
   return (
@@ -137,7 +156,9 @@ const NotesPage: React.FC = () => {
       <Box className="notes-container">
         {notes.map((note) => (
           <Paper key={note.id} className="note" ref={lastNoteRef}>
-            <Typography className="note-date">{note.date}</Typography>
+            <Typography className="note-date">
+              {formatDate(note.date)}
+            </Typography>
 
             <div className="icon-container">
               <IconButton
